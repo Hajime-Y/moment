@@ -263,6 +263,10 @@ class MOMENT(nn.Module):
         enc_out = enc_out.reshape((-1, n_channels, n_patches, self.config.d_model))
         # [batch_size x n_channels x n_patches x d_model]
 
+        # For Mists model
+        # [batch_size, n_channels x n_patches, d_model]
+        hidden_states = enc_out.reshape(batch_size, n_channels * n_patches, self.config.d_model)
+
         if reduction == "mean":
             enc_out = enc_out.mean(dim=1, keepdim=False)  # Mean across channels
             # [batch_size x n_patches x d_model]
@@ -276,7 +280,7 @@ class MOMENT(nn.Module):
             raise NotImplementedError(f"Reduction method {reduction} not implemented.")
 
         return TimeseriesOutputs(
-            embeddings=enc_out, input_mask=input_mask, metadata=reduction
+            embeddings=enc_out, input_mask=input_mask, metadata=reduction, hidden_states=hidden_states
         )
 
     def reconstruction(

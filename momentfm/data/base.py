@@ -15,3 +15,4 @@ class TimeseriesOutputs:
     embeddings: npt.NDArray = None
     metadata: dict = None
     illegal_output: bool = False
+    hidden_states: npt.NDArray = None  # For Mists model
